@@ -18,7 +18,7 @@
 Primero, clona el repositorio desde GitHub:
 
 ```bash
-git clone https://github.com/tu-usuario/CustomerMS.git
+git clone https://github.com/NttDataProyecto-NicollMalca/CustomerMS
 
 
 2. Configurar la base de datos MySQL
