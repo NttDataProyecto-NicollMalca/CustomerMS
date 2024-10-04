@@ -19,19 +19,19 @@ Primero, clona el repositorio desde GitHub:
 
 ```bash
 git clone https://github.com/tu-usuario/CustomerMS.git
-cd CustomerMS
+
+
 2. Configurar la base de datos MySQL
 Crea el esquema de la base de datos en MySQL ejecutando el siguiente comando:
 
-sql
-Copiar código
 CREATE SCHEMA nttdata1;
+
 3. Configurar las propiedades de conexión
 Configura las credenciales de conexión a la base de datos en el archivo src/main/resources/application.properties:
 
-properties
-Copiar código
-spring.datasource.url=jdbc:mysql://localhost:3306/nttdata1
 spring.datasource.username=root
 spring.datasource.password=tu_contraseña
+
 Asegúrate de reemplazar root y tu_contraseña con tus credenciales de MySQL.
+
+4. Por favor asegurarse de correr ambos servicios AccountMS y CustomerMS a la vez, ya que dependen del otro
