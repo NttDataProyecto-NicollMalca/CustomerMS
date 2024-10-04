@@ -1,0 +1,330 @@
+openapi: 3.0.1
+info:
+  title: Swagger Gestión de Clientes y Cuentas Bancarias
+  description: |-
+    Esto es un sistema para gestionar transacciones bancarias entre cuentas de clientes.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Servidor Local
+tags:
+  - name: clientes
+    description: Operaciones acerca de Cliente (Crear, Leer, Actualizar y Eliminar)
+paths:
+  /clientes:
+    post:
+      tags:
+        - clientes
+      summary: Agregar un cliente nuevo en el sistema bancario
+      description: Agregar un cliente nuevo en el sistema bancario
+      operationId: agregarCliente
+      requestBody:
+        description: Crear un cliente nuevo en el sistema bancario (sin ID, este se genera automáticamente)
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClienteRequest'  # Esquema para solicitud sin 'id'
+        required: true
+      responses:
+        '200':
+          description: Cliente creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClienteResponse'  # Esquema para respuesta con 'id'
+        '500':
+          description: Error de validación de entrada.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  timestamp:
+                    type: string
+                    format: date-time
+                  status:
+                    type: integer
+                    example: 500
+                  error:
+                    type: string
+                    example: "Bad Request"
+                  message:
+                    type: string
+                    example: "Debe proporcionar un correo electrónico válido"
+                  path:
+                    type: string
+                    example: "/clientes"
+    get:
+      tags:
+        - clientes
+      summary: Listar todos los clientes del sistema bancario
+      description: Listar todos los clientes del sistema bancario
+      operationId: listarClientes
+      responses:
+        '200':
+          description: Lista de clientes obtenida correctamente.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ClienteResponse'  # Respuesta contiene clientes con 'id'
+  /clientes/{id}:
+    get:
+      tags:
+        - clientes
+      summary: Obtener detalles de un cliente por su ID
+      description: Obtener detalles de un cliente
+      operationId: getClientePorId
+      parameters:
+        - name: id
+          in: path
+          description: ID del cliente
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClienteResponse'  # Respuesta contiene cliente con 'id'
+        '400':
+          description: ID inválido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  timestamp:
+                    type: string
+                    format: date-time
+                  status:
+                    type: integer
+                    example: 400
+                  error:
+                    type: string
+                    example: "Bad Request"
+                  message:
+                    type: string
+                    example: "Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; For input string: \"sdfsdfd\""
+                  path:
+                    type: string
+                    example: "/clientes/sdfsdfd"
+        '500':
+          description: Cliente no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  timestamp:
+                    type: string
+                    format: date-time
+                  status:
+                    type: integer
+                    example: 404
+                  error:
+                    type: string
+                    example: "Not Found"
+                  message:
+                    type: string
+                    example: "Cliente no encontrado con id: 302124"
+                  path:
+                    type: string
+                    example: "/clientes/302124"
+    put:
+      tags:
+        - clientes
+      summary: Actualizar los datos de un cliente
+      description: Actualizar los datos de un cliente
+      operationId: actualizarCliente
+      parameters:
+        - name: id
+          in: path
+          description: ID del cliente
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Actualizar información de un cliente
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClienteRequest'  # Esquema para solicitud sin 'id'
+        required: true
+      responses:
+        '200':
+          description: Cliente actualizado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClienteResponse'  # Respuesta con 'id'
+        '400':
+          description: ID inválido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  timestamp:
+                    type: string
+                    format: date-time
+                  status:
+                    type: integer
+                    example: 400
+                  error:
+                    type: string
+                    example: "Bad Request"
+                  message:
+                    type: string
+                    example: "Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; For input string: \"sdfsdfd\""
+                  path:
+                    type: string
+                    example: "/clientes/sdfsdfd"
+        '500':
+          description: Cliente no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  timestamp:
+                    type: string
+                    format: date-time
+                  status:
+                    type: integer
+                    example: 404
+                  error:
+                    type: string
+                    example: "Not Found"
+                  message:
+                    type: string
+                    example: "Cliente no encontrado con id: 302124"
+                  path:
+                    type: string
+                    example: "/clientes/302124"
+    delete:
+      tags:
+        - clientes
+      summary: Eliminar un cliente
+      description: Eliminar un cliente
+      operationId: eliminarCliente
+      parameters:
+        - name: id
+          in: path
+          description: ID cliente para eliminarlo
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Cuenta eliminada exitosamente
+        '400':
+          description: ID inválido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  timestamp:
+                    type: string
+                    format: date-time
+                  status:
+                    type: integer
+                    example: 400
+                  error:
+                    type: string
+                    example: "Bad Request"
+                  message:
+                    type: string
+                    example: "Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; For input string: \"sdfsdfd\""
+                  path:
+                    type: string
+                    example: "/clientes/sdfsdfd"
+        '500':
+          description: Cliente con cuentas activas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  timestamp:
+                    type: string
+                    format: date-time
+                  status:
+                    type: integer
+                    example: 404
+                  error:
+                    type: string
+                    example: "Not Found"
+                  message:
+                    type: string
+                    example: "No se puede eliminar el cliente porque tiene cuentas activas con saldo mayor a 0."
+                  path:
+                    type: string
+                    example: "/clientes/302124"
+components:
+  schemas:
+    ClienteRequest:
+      type: object
+      required:
+        - nombre
+        - apellido
+        - dni
+        - email
+      properties:
+        nombre:
+          type: string
+          description: Nombre del cliente.
+          example: Juan
+        apellido:
+          type: string
+          description: Apellido del cliente.
+          example: Pérez
+        dni:
+          type: string
+          description: DNI del cliente, debe ser único y tener 8 dígitos.
+          pattern: '^[0-9]{8}$'  # Asegura que el DNI contenga exactamente 8 dígitos.
+          example: 12345678
+        email:
+          type: string
+          description: Correo electrónico del cliente, debe tener formato válido.
+          format: email
+          pattern: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'  # Asegura que el email tenga formato válido.
+          example: juan.perez@example.com
+
+    ClienteResponse:
+      type: object
+      required:
+        - id
+        - nombre
+        - apellido
+        - dni
+        - email
+      properties:
+        id:
+          type: integer
+          description: Identificador único del cliente.
+          example: 123
+        nombre:
+          type: string
+          description: Nombre del cliente.
+          example: Juan
+        apellido:
+          type: string
+          description: Apellido del cliente.
+          example: Pérez
+        dni:
+          type: string
+          description: DNI del cliente, debe ser único y tener 8 dígitos.
+          example: 12345678
+        email:
+          type: string
+          description: Correo electrónico del cliente.
+          format: email
+          example: juan.perez@example.com
