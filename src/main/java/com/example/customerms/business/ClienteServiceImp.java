@@ -26,7 +26,7 @@ public class ClienteServiceImp implements ClienteService{
     ClienteMapper clienteMapper;
 
     @Autowired
-    private RestTemplate restTemplate; // Para llamadas a otros microservicios
+    private RestTemplate restTemplate; 
 
     private static final String Account_WS = "http://localhost:8081/cuentas";
 
@@ -34,14 +34,11 @@ public class ClienteServiceImp implements ClienteService{
     @Override
     public ClienteResponse actualizarCliente(Long id, ClienteRequest clienteRequest) {
 
-        // Obtener el cliente existente de la base de datos
         Cliente clienteExistente = clienteRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Cliente no encontrado con id: " + id));
 
-        // Pasar el ID existente al mapper para que no lo reemplace
         Cliente clienteActualizado = clienteMapper.getClienteofClienteRequest(clienteRequest, clienteExistente.getId());
 
-        // Guardar los cambios
         return clienteMapper.getClienteResponseofCliente(clienteRepository.save(clienteActualizado));
 
     }
@@ -60,9 +57,7 @@ public class ClienteServiceImp implements ClienteService{
         Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Cliente no encontrado con id: " + id));
 
-        // Verificar si el cliente tiene cuentas activas
         verificarCuentasActivas(id);
-
 
         clienteRepository.delete(cliente);
 
@@ -72,7 +67,6 @@ public class ClienteServiceImp implements ClienteService{
 
     @Override
     public ClienteResponse getClientePorId(Long id) {
-        // Verifica si el cliente existe, si no, lanza IllegalArgumentException
         Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Cliente no encontrado con id: " + id));
 
@@ -87,20 +81,16 @@ public class ClienteServiceImp implements ClienteService{
     }
 
     private void verificarCuentasActivas(Long clienteId) {
-        // Hacer la solicitud al microservicio para obtener las cuentas del cliente
         try {
             List<Map<String, Object>> cuentas = restTemplate.getForObject(Account_WS, List.class);
 
-
-            // Verificar si hay cuentas activas
             boolean tieneCuentasActivas = cuentas.stream()
-                    .anyMatch(cuenta -> (Double) cuenta.get("saldo") > 0); // Suponiendo que el saldo es un Double
+                    .anyMatch(cuenta -> (Double) cuenta.get("saldo") > 0); 
 
             if (tieneCuentasActivas) {
                 throw new IllegalArgumentException("No se puede eliminar el cliente porque tiene cuentas activas con saldo mayor a 0.");
             }
         } catch (RestClientException e) {
-            // Manejar error de cliente
             throw new RuntimeException("Error al obtener cuentas del microservicio", e);
         }
 
