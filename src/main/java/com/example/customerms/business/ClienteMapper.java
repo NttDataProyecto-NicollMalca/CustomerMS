@@ -21,11 +21,10 @@ public class ClienteMapper {
     public Cliente getClienteofClienteRequest(ClienteRequest request, Integer existingId) {
         Cliente cliente = new Cliente();
 
-        // Si se pasa un ID existente, úsalo, de lo contrario genera uno nuevo
         if (existingId != null) {
             cliente.setId(existingId);
         } else {
-            cliente.setId(generarIdAleatorio());  // Generar ID aleatorio solo si no existe uno
+            cliente.setId(generarIdAleatorio());  
         }
 
         cliente.setNombre(request.getNombre());
