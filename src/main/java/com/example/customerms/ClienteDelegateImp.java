@@ -5,6 +5,7 @@ import com.example.customerms.business.ClienteService;
 import com.example.customerms.model.ClienteRequest;
 import com.example.customerms.model.ClienteResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +40,9 @@ public class ClienteDelegateImp implements ClientesApiDelegate {
 
     @Override
     public ResponseEntity<List<ClienteResponse>> listarClientes() {
-        return ResponseEntity.ok(clienteService.listarClientes());
+        List<ClienteResponse> listaClientes = clienteService.listarClientes();
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(listaClientes);
     }
 }

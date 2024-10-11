@@ -13,7 +13,7 @@ public interface ClienteService {
 
     public ClienteResponse agregarCliente(ClienteRequest clienteRequest);
 
-    public ResponseEntity<Void> eliminarCliente(Long id);
+    public void eliminarCliente(Long id);
 
     public ClienteResponse getClientePorId(Long id);
 

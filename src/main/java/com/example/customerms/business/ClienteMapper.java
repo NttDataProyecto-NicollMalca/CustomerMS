@@ -5,11 +5,24 @@ import com.example.customerms.model.ClienteRequest;
 import com.example.customerms.model.ClienteResponse;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
 import java.util.Random;
 import java.util.stream.IntStream;
 
 @Component
 public class ClienteMapper {
+
+    private static ClienteMapper instance;
+
+    private ClienteMapper() {
+    }
+
+    public static ClienteMapper getInstance() {
+        if (instance == null) {
+            instance = new ClienteMapper();
+        }
+        return instance;
+    }
 
     private int generarIdAleatorio() {
         return IntStream.generate(() -> new Random().nextInt(900000) + 100000)
@@ -21,23 +34,15 @@ public class ClienteMapper {
     public Cliente getClienteofClienteRequest(ClienteRequest request, Integer existingId) {
         Cliente cliente = new Cliente();
 
-        // Si se pasa un ID existente, úsalo, de lo contrario genera uno nuevo
-        if (existingId != null) {
-            cliente.setId(existingId);
-        } else {
-            cliente.setId(generarIdAleatorio());  // Generar ID aleatorio solo si no existe uno
-        }
-
+        cliente.setId(Objects.requireNonNullElseGet(existingId, this::generarIdAleatorio));
         cliente.setNombre(request.getNombre());
         cliente.setApellido(request.getApellido());
 
-        // Validar el DNI
         if (!request.getDni().matches("^[0-9]{8}$")) {
             throw new IllegalArgumentException("El DNI debe tener exactamente 8 dígitos");
         }
         cliente.setDni(request.getDni());
 
-        // Validar el formato del email
         if (!request.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
             throw new IllegalArgumentException("Debe proporcionar un correo electrónico válido");
         }

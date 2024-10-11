@@ -28,4 +28,5 @@ public class Cliente {
     @Email(message = "Debe proporcionar un correo electrónico válido", regexp = "^[A-Za-z0-9+_.-]+@(.+)$")
     @Column(name = "email", nullable = false)
     private String email;
+
 }
