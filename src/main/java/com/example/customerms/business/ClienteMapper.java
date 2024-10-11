@@ -34,22 +34,18 @@ public class ClienteMapper {
     public Cliente getClienteofClienteRequest(ClienteRequest request, Integer existingId) {
         Cliente cliente = new Cliente();
 
-<<<<<<< HEAD
-        cliente.setId(Objects.requireNonNullElseGet(existingId, this::generarIdAleatorio));
-=======
         if (existingId != null) {
             cliente.setId(existingId);
         } else {
-            cliente.setId(generarIdAleatorio());  
+            cliente.setId(generarIdAleatorio());
         }
-
->>>>>>> 7838560ab9e5f5b68064f7480a8be014f5db2cff
         cliente.setNombre(request.getNombre());
         cliente.setApellido(request.getApellido());
 
         if (!request.getDni().matches("^[0-9]{8}$")) {
             throw new IllegalArgumentException("El DNI debe tener exactamente 8 dígitos");
         }
+
         cliente.setDni(request.getDni());
 
         if (!request.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {

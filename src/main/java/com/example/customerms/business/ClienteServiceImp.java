@@ -24,11 +24,6 @@ public class ClienteServiceImp implements ClienteService{
     private final  ClienteValidator  clienteValidator;
     private final  RestTemplate restTemplate;
 
-<<<<<<< HEAD
-=======
-    @Autowired
-    private RestTemplate restTemplate; 
->>>>>>> 7838560ab9e5f5b68064f7480a8be014f5db2cff
 
     private static final String Account_WS = "http://localhost:8081/cuentas";
 
@@ -48,12 +43,11 @@ public class ClienteServiceImp implements ClienteService{
         Cliente clienteExistente = clienteRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Cliente no encontrado con id: " + id));
 
-<<<<<<< HEAD
         clienteValidator.validar(clienteRequest);
 
-=======
->>>>>>> 7838560ab9e5f5b68064f7480a8be014f5db2cff
-        Cliente clienteActualizado = clienteMapper.getClienteofClienteRequest(clienteRequest, clienteExistente.getId());
+        Cliente clienteActualizado = clienteMapper.getClienteofClienteRequest(clienteRequest, Math.toIntExact(id));
+
+        System.out.println(clienteActualizado);
 
         return clienteMapper.getClienteResponseofCliente(clienteRepository.save(clienteActualizado));
     }
@@ -75,10 +69,6 @@ public class ClienteServiceImp implements ClienteService{
                 .orElseThrow(() -> new IllegalArgumentException("Cliente no encontrado con id: " + id));
 
         verificarCuentasActivas(id);
-<<<<<<< HEAD
-=======
-
->>>>>>> 7838560ab9e5f5b68064f7480a8be014f5db2cff
         clienteRepository.delete(cliente);
     }
 
@@ -100,14 +90,8 @@ public class ClienteServiceImp implements ClienteService{
     private void verificarCuentasActivas(Long clienteId) {
         try {
             List<Map<String, Object>> cuentas = restTemplate.getForObject(Account_WS, List.class);
-<<<<<<< HEAD
             boolean tieneCuentasActivas = cuentas.stream()
                     .anyMatch(cuenta -> (Double) cuenta.get("saldo") > 0);
-=======
-
-            boolean tieneCuentasActivas = cuentas.stream()
-                    .anyMatch(cuenta -> (Double) cuenta.get("saldo") > 0); 
->>>>>>> 7838560ab9e5f5b68064f7480a8be014f5db2cff
 
             if (tieneCuentasActivas) {
                 throw new IllegalArgumentException("No se puede eliminar el cliente porque tiene cuentas activas con saldo mayor a 0.");
